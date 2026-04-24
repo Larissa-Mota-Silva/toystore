@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home - ToyStore</title>
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>🧸 ToyStore</h2>
+
+    <a href="/" class="active">🏠 Home</a>
+    <a href="/catalogo">🛒 Catálogo</a>
+    <a th:if="${session.usuarioLogado != null and session.usuarioLogado.tipo == 'FUNCIONARIO'}" href="/admin">⚙️ Administração</a>
+    <a href="/sobre">👥 Sobre</a>
+    
+	<!-- LOGIN / USUÁRIO -->
+	<div class="login-separator"></div>
+
+	<!-- NÃO LOGADO -->
+	<div th:if="${session.usuarioLogado == null}">
+	    <a href="/login" class="login-item">
+	        🔐 Fazer login
+	    </a>
+	</div>
+
+	<!-- LOGADO -->
+	<div th:if="${session.usuarioLogado != null}" class="login-item user-logado">
+
+	    <div style="display:flex; flex-direction:column; gap:6px; width:100%;">
+
+			<a href="/perfil" class="user-link">
+			    👋 <span th:text="${session.usuarioLogado.nome}">Usuário</span>
+			</a>
+
+	        <span style="font-size:12px; opacity:0.9;">
+	            Bem-vindo de volta
+	        </span>
+
+	        <a href="/logout"
+	           style="margin-top:8px; text-align:center; background:#ef4444; color:white; padding:6px; border-radius:8px; font-size:13px;">
+	            Sair
+	        </a>
+
+	    </div>
+
+	</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Descubra brinquedos incríveis 🎁</h1>
+            <p>Qualidade, diversão e os melhores preços para todas as idades.</p>
+            <button onclick="location.href='/catalogo'">Explorar agora</button>
+        </div>
+    </div>
+
+    <!-- DESTAQUES -->
+    <div class="container">
+        <h2 class="section-title">🆕 Últimos adicionados</h2>
+
+		<div class="grid">
+
+		    <div class="card" th:each="p : ${produtos}">
+		        <span class="tag">Novo</span>
+
+		        <img th:src="@{'/img/' + ${p.imagem}}">
+
+		        <div class="card-body">
+		            <h3 th:text="${p.descricao}"></h3>
+		            <p th:text="${p.categoria}"></p>
+
+		            <span class="preco"
+		                  th:text="'R$ ' + ${#numbers.formatDecimal(p.valor,1,2)}"></span>
+
+		            <button th:onclick="'location.href=\'/detalhe/' + ${p.id} + '\''">
+		                Ver detalhes
+		            </button>
+		        </div>
+		    </div>
+
+		</div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Perfil</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body class="page-normal">
+
+<div class="main">
+
+    <div class="header">
+        <h1>👤 Meu Perfil</h1>
+    </div>
+
+    <div class="container">
+
+        <div class="perfil-wrapper">
+
+            <div class="perfil-card">
+
+                <!-- TOPO -->
+                <div class="perfil-top">
+
+                    <div class="avatar">
+                        <span th:text="${#strings.substring(usuario.nome,0,1)}">U</span>
+                    </div>
+
+                    <div class="perfil-info">
+                        <h2 th:text="${usuario.nome}">Nome</h2>
+                        <div class="badge" th:text="${usuario.tipo}">CLIENTE</div>
+                    </div>
+
+                </div>
+
+                <!-- INFOS -->
+                <div class="grid-info">
+
+                    <div class="info-box">
+                        <strong>Email</strong>
+                        <span th:text="${usuario.email}"></span>
+                    </div>
+
+                    <!-- SOMENTE CLIENTE -->
+                    <div class="info-box" th:if="${usuario.tipo == 'CLIENTE'}">
+                        <strong>Telefone</strong>
+                        <span data-format="tel" th:text="${usuario.telefone != null ? usuario.telefone : 'Não informado'}"></span>
+                    </div>
+
+                    <div class="info-box" th:if="${usuario.tipo == 'CLIENTE'}">
+                        <strong>CPF</strong>
+                        <span data-format="cpf" th:text="${usuario.cpf != null ? usuario.cpf : 'Não informado'}"></span>
+                    </div>
+
+                    <div class="info-box" th:if="${usuario.tipo == 'CLIENTE'}">
+                        <strong>Data nascimento</strong>
+                        <span th:text="${usuario.dataNascimento != null ? #dates.format(usuario.dataNascimento, 'dd/MM/yyyy') : 'Não informado'}"></span>
+                    </div>
+
+                    <!-- SOMENTE FUNCIONÁRIO -->
+                    <div class="info-box" th:if="${usuario.tipo == 'FUNCIONARIO'}">
+                        <strong>Cargo</strong>
+                        <span th:text="${usuario.cargo != null ? usuario.cargo : 'Não informado'}"></span>
+                    </div>
+
+                    <div class="info-box" th:if="${usuario.tipo == 'FUNCIONARIO'}">
+                        <strong>Contratação</strong>
+                        <span th:text="${usuario.dataContratacao != null ? #dates.format(usuario.dataContratacao, 'dd/MM/yyyy') : 'Não informado'}"></span>
+                    </div>
+
+                </div>
+
+                <!-- BOTÕES -->
+                <div class="btn-area">
+
+                    <a href="/perfil/editar" class="btn-novo" style="display:inline-block; text-align:center;">
+                        ✏️ Editar perfil
+                    </a>
+                    
+                    <a href="/" class="btn cancelar">
+                        ⬅ Voltar
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+document.querySelectorAll('[data-format="cpf"]').forEach(function(el) {
+    var v = el.textContent.trim().replace(/\D/g, '');
+    if (v.length === 11) {
+        el.textContent = v.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+    }
+});
+document.querySelectorAll('[data-format="tel"]').forEach(function(el) {
+    var v = el.textContent.trim().replace(/\D/g, '');
+    if (v.length === 11) {
+        el.textContent = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+    } else if (v.length === 10) {
+        el.textContent = v.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
+    }
+});
+</script>
+
+</body>
+</html>

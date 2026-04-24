@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo - ToyStore</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>🧸 ToyStore</h2>
+
+    <a href="/">🏠 Home</a>
+    <a href="/catalogo" class="active">🛒 Catálogo</a>
+    <a th:if="${session.usuarioLogado != null and session.usuarioLogado.tipo == 'FUNCIONARIO'}" href="/admin">⚙️ Administração</a>
+    <a href="/sobre">👥 Sobre</a>
+
+	<!-- LOGIN / USUÁRIO -->
+	<div class="login-separator"></div>
+
+	<div th:if="${session.usuarioLogado == null}">
+	    <a href="/login" class="login-item">
+	        🔐 Fazer login
+	    </a>
+	</div>
+
+	<div th:if="${session.usuarioLogado != null}" class="login-item user-logado">
+	    <div style="display:flex; flex-direction:column; gap:6px; width:100%;">
+			<a href="/perfil" class="user-link">
+			    👋 <span th:text="${session.usuarioLogado.nome}">Usuário</span>
+			</a>
+	        <span style="font-size:12px; opacity:0.9;">Bem-vindo de volta</span>
+	        <a href="/logout" style="margin-top:8px; text-align:center; background:#ef4444; color:white; padding:6px; border-radius:8px; font-size:13px;">Sair</a>
+	    </div>
+	</div>
+</div>
+<div class="main">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>Catálogo de Brinquedos</h1>
+    </div>
+
+    <!-- SEÇÃO -->
+    <div class="section">
+
+        <h2>Categorias</h2>
+
+		<div class="filtro">
+
+		    <!-- TODAS -->
+		    <a href="/catalogo">
+		        <button>Todas</button>
+		    </a>
+
+		    <!-- DINÂMICO -->
+		    <a th:each="cat : ${categorias}"
+		       th:href="@{/categoria/{nome}(nome=${cat})}">
+
+		        <button th:text="${cat}"></button>
+
+		    </a>
+
+		</div>
+
+        <!-- GRID -->
+		<div class="grid">
+
+			<a th:each="cat : ${categorias}"
+			   th:href="@{'/categoria/' + ${cat}}"
+			   class="categoria-card">
+
+			    <h3 th:text="${cat}"></h3>
+
+			    <p>Explorar categoria</p>
+
+			</a>
+
+		</div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sobre - ToyStore</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>🧸 ToyStore</h2>
+    <a href="/">🏠 Home</a>
+    <a href="/catalogo">🛒 Catálogo</a>
+    <a th:if="${session.usuarioLogado != null and session.usuarioLogado.tipo == 'FUNCIONARIO'}" href="/admin">⚙️ Administração</a>
+    <a href="/sobre" class="active">👥 Sobre</a>
+
+	<!-- LOGIN / USUÁRIO -->
+	<div class="login-separator"></div>
+
+	<div th:if="${session.usuarioLogado == null}">
+	    <a href="/login" class="login-item">
+	        🔐 Fazer login
+	    </a>
+	</div>
+
+	<div th:if="${session.usuarioLogado != null}" class="login-item user-logado">
+	    <div style="display:flex; flex-direction:column; gap:6px; width:100%;">
+			<a href="/perfil" class="user-link">
+			    👋 <span th:text="${session.usuarioLogado.nome}">Usuário</span>
+			</a>
+	        <span style="font-size:12px; opacity:0.9;">Bem-vindo de volta</span>
+	        <a href="/logout" style="margin-top:8px; text-align:center; background:#ef4444; color:white; padding:6px; border-radius:8px; font-size:13px;">Sair</a>
+	    </div>
+	</div>
+</div>
+
+<div class="main">
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>Sobre o Projeto 🚀</h1>
+    </div>
+
+    <!-- SOBRE -->
+    <div class="section">
+        <div class="card">
+            <h2>📌 O Projeto</h2>
+            <p>
+                A ToyStore é um sistema web desenvolvido com Spring Boot com o objetivo de simular
+                uma loja de brinquedos moderna, com catálogo interativo e visual agradável.
+            </p>
+        </div>
+    </div>
+
+    <!-- TECNOLOGIAS -->
+    <div class="section">
+        <h2>💻 Tecnologias</h2>
+        <div class="grid">
+
+            <div class="card tech">
+                <h3>Java</h3>
+                <p>Backend</p>
+            </div>
+
+            <div class="card tech">
+                <h3>Spring Boot</h3>
+                <p>Estrutura</p>
+            </div>
+
+            <div class="card tech">
+                <h3>HTML/CSS</h3>
+                <p>Interface</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="section">
+        <h2>📈 Evolução</h2>
+
+        <div class="card timeline">
+            <div>
+                <strong>Início</strong>
+                <p>Planejamento do sistema</p>
+            </div>
+
+            <div>
+                <strong>Catálogo</strong>
+                <p>Listagem de produtos</p>
+            </div>
+
+            <div>
+                <strong>Detalhes</strong>
+                <p>Página individual</p>
+            </div>
+
+            <div>
+                <strong>Final</strong>
+                <p>Interface moderna</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- EQUIPE -->
+    <div class="section">
+        <h2>👨‍💻 Equipe</h2>
+
+        <div class="grid">
+
+            <div class="card dev">
+                <img src="/img/larissa.png">
+                <h3>Larissa Mota</h3>
+                <p>Desenvolvedora</p>
+            </div>
+
+            <div class="card dev">
+                <img src="/img/Rafael.png">
+                <h3>Rafael Figueiredo</h3>
+                <p>Desenvolvedor</p>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

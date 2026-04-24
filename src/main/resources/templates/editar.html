@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Perfil</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="page-normal">
+
+<div class="main">
+
+    <div class="header">
+        <h1>✏️ Editar Perfil</h1>
+    </div>
+
+    <div class="container">
+
+        <form class="perfil-card" method="post" th:action="@{/perfil/editar}">
+
+            <!-- TOPO -->
+            <div class="perfil-top">
+
+                <div class="avatar">
+                    <span th:text="${#strings.substring(usuario.nome,0,1)}">U</span>
+                </div>
+
+                <div class="perfil-info">
+                    <input type="text"
+                           name="nome"
+                           th:value="${usuario.nome}"
+                           class="input-titulo">
+
+                    <div class="badge" th:text="${usuario.tipo}"></div>
+                </div>
+
+            </div>
+
+            <!-- INFOS EDITÁVEIS -->
+            <div class="grid-info">
+
+                <div class="info-box">
+                    <strong>Email</strong>
+                    <input type="email" name="email" th:value="${usuario.email}" required>
+                </div>
+
+                <!-- SOMENTE CLIENTE -->
+                <div class="info-box" th:if="${usuario.tipo == 'CLIENTE'}">
+                    <strong>Telefone</strong>
+                    <input type="text" name="telefone" id="inputTelefone"
+                           th:value="${usuario.telefone}"
+                           placeholder="(00) 00000-0000" maxlength="15"
+                           oninput="mascaraTelefone(this)">
+                </div>
+
+                <div class="info-box" th:if="${usuario.tipo == 'CLIENTE'}">
+                    <strong>CPF</strong>
+                    <input type="text" name="cpf" id="inputCpf"
+                           th:value="${usuario.cpf != null and #strings.length(usuario.cpf) == 11 ?
+                               #strings.substring(usuario.cpf,0,3) + '.' +
+                               #strings.substring(usuario.cpf,3,6) + '.' +
+                               #strings.substring(usuario.cpf,6,9) + '-' +
+                               #strings.substring(usuario.cpf,9,11) : usuario.cpf}"
+                           placeholder="000.000.000-00" maxlength="14"
+                           oninput="mascaraCPF(this)">
+                </div>
+
+                <div class="info-box" th:if="${usuario.tipo == 'CLIENTE'}">
+                    <strong>Data nascimento</strong>
+                    <input type="date" name="dataNascimento" id="inputNascimento"
+                           min="1900-01-01"
+                           th:max="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+                           th:value="${usuario.dataNascimento != null ? #dates.format(usuario.dataNascimento, 'yyyy-MM-dd') : ''}">
+                </div>
+
+                <!-- SOMENTE FUNCIONÁRIO -->
+                <div class="info-box" th:if="${usuario.tipo == 'FUNCIONARIO'}">
+                    <strong>Cargo</strong>
+                    <input type="text" name="cargo" th:value="${usuario.cargo}">
+                </div>
+
+                <div class="info-box" th:if="${usuario.tipo == 'FUNCIONARIO'}">
+                    <strong>Contratação</strong>
+                    <input type="date" name="dataContratacao"
+                           min="1990-01-01"
+                           th:max="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+                           th:value="${usuario.dataContratacao != null ? #dates.format(usuario.dataContratacao, 'yyyy-MM-dd') : ''}">
+                </div>
+
+            </div>
+
+            <!-- BOTÕES -->
+            <div class="btn-area">
+
+                <a href="/perfil" class="btn cancelar">
+                    ⬅ Cancelar
+                </a>
+
+                <button type="submit" class="btn-novo">
+                    💾 Salvar alterações
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+function mascaraCPF(input) {
+    var v = input.value.replace(/\D/g, '').substring(0, 11);
+    v = v.replace(/^(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    v = v.replace(/\.(\d{3})(\d)/, '.$1-$2');
+    input.value = v;
+}
+function mascaraTelefone(input) {
+    var v = input.value.replace(/\D/g, '').substring(0, 11);
+    if (v.length <= 10) {
+        v = v.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else {
+        v = v.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+    }
+    input.value = v;
+}
+</script>
+
+</body>
+</html>

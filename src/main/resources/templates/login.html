@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login / Cadastro</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        /* melhoria só visual da tela de login */
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--roxo-escuro);
+        }
+
+        .switch {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .switch button {
+            flex: 1;
+        }
+
+        .form-card h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--roxo-escuro);
+        }
+
+        .form-card input,
+        .form-card select {
+            margin-bottom: 10px;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body class="login-page">
+
+<div class="login-wrapper">
+
+    <div class="login-box">
+
+        <h1 class="login-title">🧸 ToyStore</h1>
+
+        <div class="container">
+
+            <!-- mensagens -->
+            <p th:if="${erro}" style="color:red; text-align:center;" th:text="${erro}"></p>
+            <p th:if="${sucesso}" style="color:green; text-align:center;" th:text="${sucesso}"></p>
+
+            <!-- switch -->
+            <div class="switch">
+                <button class="btn-novo" onclick="show('login')">Login</button>
+                <button class="btn-novo" onclick="show('cadastro')">Cadastro</button>
+            </div>
+
+            <!-- LOGIN -->
+            <form id="login" class="form-card" method="post" th:action="@{/login}">
+                <h2>Entrar na sua conta</h2>
+
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="senha" placeholder="Senha" required>
+
+                <button type="submit" class="btn-comprar">Entrar</button>
+
+                <p class="hint">Acesse sua conta para continuar suas compras</p>
+				
+				<a href="/" class="btn cancelar full" style="display:block; text-align:center; margin-top:10px;">
+				    ⬅ Continuar sem login
+				</a>
+            </form>
+
+            <!-- CADASTRO -->
+            <form id="cadastro" class="form-card" method="post" th:action="@{/cadastro}" style="display:none;">
+
+                <h2>Criar conta</h2>
+
+                <input type="text" name="nome" placeholder="Nome completo" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="senha" placeholder="Senha (mínimo 6 caracteres)" required minlength="6">
+
+                <select name="tipo" onchange="toggleTipo(this)">
+                    <option value="CLIENTE">Cliente</option>
+                    <option value="FUNCIONARIO">Funcionário</option>
+                </select>
+
+                <!-- CLIENTE -->
+                <div id="cliente">
+                    <input type="text" id="cpfInput" name="cpf" placeholder="CPF (000.000.000-00)"
+                           maxlength="14" oninput="mascaraCPF(this)">
+                    <input type="text" id="telefoneInput" name="telefone" placeholder="Telefone ((00) 00000-0000)"
+                           maxlength="15" oninput="mascaraTelefone(this)">
+                    <label style="font-size:12px;color:#6b7280;">Data de Nascimento</label>
+                    <input type="date" id="dataNascimento" name="dataNascimento" min="1900-01-01">
+                </div>
+
+                <!-- FUNCIONARIO -->
+                <div id="funcionario" style="display:none;">
+                    <input type="text" name="cargo" placeholder="Cargo">
+                    <label style="font-size:12px;color:#6b7280;">Data de Contratação</label>
+                    <input type="date" id="dataContratacao" name="dataContratacao" min="1990-01-01">
+                    <input type="password" name="codigoFuncionario" placeholder="Código de acesso (funcionários)" title="Código fornecido pela empresa">
+                </div>
+
+                <button type="submit" class="btn-comprar">Cadastrar</button>
+
+                <p class="hint">Leva menos de 1 minuto pra criar sua conta</p>
+				
+				<a href="/" class="btn cancelar full" style="display:block; text-align:center; margin-top:10px;">
+				    ⬅ Voltar para o site
+				</a>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+function show(tipo) {
+    document.getElementById("login").style.display = tipo === 'login' ? 'block' : 'none';
+    document.getElementById("cadastro").style.display = tipo === 'cadastro' ? 'block' : 'none';
+}
+
+function toggleTipo(select) {
+    document.getElementById("cliente").style.display =
+        select.value === "CLIENTE" ? "block" : "none";
+
+    document.getElementById("funcionario").style.display =
+        select.value === "FUNCIONARIO" ? "block" : "none";
+}
+
+function mascaraCPF(input) {
+    var v = input.value.replace(/\D/g, '').substring(0, 11);
+    v = v.replace(/^(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    v = v.replace(/\.(\d{3})(\d)/, '.$1-$2');
+    input.value = v;
+}
+function mascaraTelefone(input) {
+    var v = input.value.replace(/\D/g, '').substring(0, 11);
+    if (v.length <= 10) {
+        v = v.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else {
+        v = v.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+    }
+    input.value = v;
+}
+
+// Limita datas ao dia de hoje
+var hoje = new Date().toISOString().split('T')[0];
+document.getElementById('dataNascimento').max = hoje;
+document.getElementById('dataContratacao').max = hoje;
+
+// Abre o tab correto baseado no parâmetro ?tab=
+const params = new URLSearchParams(window.location.search);
+if (params.get('tab') === 'cadastro') {
+    show('cadastro');
+}
+</script>
+
+</body>
+</html>

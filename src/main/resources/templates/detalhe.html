@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detalhes do Produto</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>🧸 ToyStore</h2>
+    <a href="/">🏠 Home</a>
+    <a href="/catalogo">🛒 Catálogo</a>
+    <a th:if="${session.usuarioLogado != null and session.usuarioLogado.tipo == 'FUNCIONARIO'}" href="/admin">⚙️ Administração</a>
+    <a href="/sobre">👥 Sobre</a>
+
+	<!-- LOGIN / USUÁRIO -->
+	<div class="login-separator"></div>
+
+	<div th:if="${session.usuarioLogado == null}">
+	    <a href="/login" class="login-item">
+	        🔐 Fazer login
+	    </a>
+	</div>
+
+	<div th:if="${session.usuarioLogado != null}" class="login-item user-logado">
+	    <div style="display:flex; flex-direction:column; gap:6px; width:100%;">
+			<a href="/perfil" class="user-link">
+			    👋 <span th:text="${session.usuarioLogado.nome}">Usuário</span>
+			</a>
+	        <span style="font-size:12px; opacity:0.9;">Bem-vindo de volta</span>
+	        <a href="/logout" style="margin-top:8px; text-align:center; background:#ef4444; color:white; padding:6px; border-radius:8px; font-size:13px;">Sair</a>
+	    </div>
+	</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="breadcrumb">
+            Home > Categoria > Produto
+        </div>
+    </div>
+
+    <!-- CONTEÚDO -->
+    <div class="container">
+
+		<div class="produto">
+
+		    <!-- IMAGEM -->
+		    <img th:src="@{'/img/' + ${produto.imagem}}">
+
+		    <!-- INFO -->
+		    <div class="info">
+
+		        <div class="codigo">
+		            Código: <span th:text="${produto.codigo}"></span>
+		        </div>
+
+		        <h1 th:text="${produto.descricao}"></h1>
+
+		        <div class="preco"
+		             th:text="'R$ ' + ${#numbers.formatDecimal(produto.valor,1,2)}">
+		        </div>
+
+		        <button class="btn-comprar">Comprar</button>
+
+				<div class="descricao">
+				    <h3>Detalhes do produto</h3>
+					
+					<br>
+
+				    <p><strong>Categoria:</strong> 
+				        <span th:text="${produto.categoria}"></span>
+				    </p>
+
+				    <p><strong>Marca:</strong> 
+				        <span th:text="${produto.marca}"></span>
+				    </p>
+					
+					<br>
+
+				    <p><strong>Detalhes:</strong> 
+				        <span th:text="${produto.detalhes}"></span>
+				    </p>
+				</div>
+
+		    </div>
+
+		</div>
+		
+		<div class="relacionados">
+
+			    <h2>Mais itens da mesma categoria</h2>
+
+			    <div class="carrossel-relacionados">
+
+			        <div class="card-relacionado" th:each="p : ${relacionados}">
+
+			            <a th:href="@{'/detalhe/' + ${p.id}}" class="card-link">
+
+			                <img th:src="@{'/img/' + ${p.imagem}}" alt="Produto">
+
+			                <h4 th:text="${p.descricao}"></h4>
+
+			                <p class="preco"
+			                   th:text="'R$ ' + ${#numbers.formatDecimal(p.valor,1,2)}">
+			                </p>
+
+			            </a>
+
+			        </div>
+
+			    </div>
+
+			</div>
+
+    </div>
+	
+
+</div>
+
+</body>
+</html>

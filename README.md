@@ -1,4 +1,4 @@
-# 🧸 Brinquedos — Loja Virtual
+# 🧸 ToyStore — Loja Virtual
 
 Aplicação web de uma loja de brinquedos desenvolvida como projeto acadêmico na **FATEC Guarulhos**.  
 Permite que clientes naveguem pelo catálogo de produtos e que funcionários gerenciem o estoque via painel administrativo.
